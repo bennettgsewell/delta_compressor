@@ -81,10 +81,16 @@ mod tests {
     }
 }
 
+pub mod block_reader;
+pub mod file_block_reader;
+
+/// The data type of the block_number.
+pub type BlockID = u64;
+
 /// Files are split into blocks this represents on of those data chunks.
 pub struct Block {
     /// The number of the block in the file.
-    block_number: usize,
+    block_number: BlockID,
 
     /// The buffer of data inside the block.
     buf: Vec<u8>,
