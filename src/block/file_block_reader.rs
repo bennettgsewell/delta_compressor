@@ -38,7 +38,7 @@ pub struct FileBlockReader {
     /// from the file.
     chunk_digested: usize,
     /// File data is read into this buffer, then it's broken into Blocks as required
-    chunk_buf: [u8; CHUNK_BUF_SIZE],
+    chunk_buf: Box<[u8; CHUNK_BUF_SIZE]>,
 
     /// Has the entire file been read.
     entire_file_read: bool,
@@ -60,7 +60,7 @@ impl FileBlockReader {
             chunk_offset: 0,
             chunk_length: 0,
             chunk_digested: 0,
-            chunk_buf: [0u8; CHUNK_BUF_SIZE],
+            chunk_buf: Box::new([0u8; CHUNK_BUF_SIZE]),
             entire_file_read: false,
         })
     }
@@ -82,7 +82,7 @@ impl FileBlockReader {
             // Read the next chunk into the buffer
             self.chunk_length = self
                 .f
-                .read_at(&mut self.chunk_buf, self.chunk_offset as u64)?;
+                .read_at(&mut (*self.chunk_buf), self.chunk_offset as u64)?;
 
             // None of the new chunk has been digested yet.
             self.chunk_digested = 0;
@@ -127,7 +127,7 @@ impl BlockReader for FileBlockReader {
                     block_number: self.current_block_id,
                     buf: buffer,
                 });
-                
+
                 // Increment the block
                 self.current_block_id += 1;
 
