@@ -34,9 +34,9 @@ mod tests {
 
 /// Program flags and options
 pub struct ProgramArguments {
-    working_dir: Option<PathBuf>,
+    pub working_dir: Option<PathBuf>,
 }
-
+    
 /// Parses command line arguments and returns a ProgramArguments object.
 pub fn parse_arguments(args: Vec<String>) -> ProgramArguments {
     let mut set_options = ProgramArguments { working_dir: None };
